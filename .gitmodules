@@ -1,3 +1,6 @@
 [submodule "TChapter"]
 	path = TChapter
 	url = https://github.com/vcb-s/TChapter.git
+[submodule "utils/eac3to-wrapper"]
+	path = utils/eac3to-wrapper
+	url = https://github.com/AkarinVS/eac3to-wrapper
