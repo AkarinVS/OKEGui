@@ -1,8 +1,8 @@
 name: OKEGui Build
 
 on:
-  push:
-    branches: github-actions
+  release:
+    types: [created]
 
 jobs:
   build:
@@ -48,8 +48,17 @@ jobs:
         mkdir -p "./OKEGui/OKEGui/bin/Release/tools/eac3to"
         cp eac3to-wrapper/eac3to-wrapper.exe "./OKEGui/OKEGui/bin/Release/tools/eac3to"
 
-    - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+    - name: Package release
+      shell: bash
+      run: |
+        cd "./OKEGui/OKEGui/bin/"
+        mv Release "OKEGui-Amod-$(git describe --tags)"
+        git clone https://github.com/AkarinVS/zip/
+        zip/zip.exe -9r amd64.zip "OKEGui-Amod-$(git describe --tags)"/
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
       with:
-        name: OKEGui-release
-        path: "./OKEGui/OKEGui/bin"
+        files: "./OKEGui/OKEGui/bin/amd64.zip"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
