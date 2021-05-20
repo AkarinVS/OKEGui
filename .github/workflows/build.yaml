@@ -54,11 +54,11 @@ jobs:
         cd "./OKEGui/OKEGui/bin/"
         mv Release "OKEGui-Amod-$(git describe --tags)"
         git clone https://github.com/AkarinVS/zip/
-        zip/zip.exe -9r amd64.zip "OKEGui-Amod-$(git describe --tags)"/
+        zip/zip.exe -9r OKEGui-release.zip "OKEGui-Amod-$(git describe --tags)"/
 
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: "./OKEGui/OKEGui/bin/amd64.zip"
+        files: "./OKEGui/OKEGui/bin/OKEGui-release.zip"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
