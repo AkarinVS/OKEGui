@@ -7,6 +7,11 @@ import mvsfunc as mvf
 
 core.num_threads = 8
 
+# Use #OKE:SCRIPTDIR to get the project directory.
+# Must use it inside a raw string. For example:
+#sys.path.append(r'#OKE:SCRIPTDIR')
+#core.std.LoadPlugin(r'#OKE:SCRIPTDIR\custom.dll')
+
 #OKE:MEMORY
 core.max_cache_size = 8000
 
