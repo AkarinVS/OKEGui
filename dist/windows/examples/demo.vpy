@@ -1,11 +1,17 @@
 import vapoursynth as vs
 import sys
+import os.path
 import math
 from vapoursynth import core
 import havsfunc as haf
 import mvsfunc as mvf
 
 core.num_threads = 8
+
+#OKE:SCRIPTDIR
+scriptDir = ''
+#sys.path.append(scriptDir) # import modules under the project directory
+#core.std.LoadPlugin(os.path.join(scriptDir, 'libcustom.dll')) # or load custom plugins
 
 #OKE:MEMORY
 core.max_cache_size = 8000
