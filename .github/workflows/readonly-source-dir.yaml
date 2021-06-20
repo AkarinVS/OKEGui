@@ -1,8 +1,8 @@
-name: OKEGui Build
+name: OKEGui Custom Build for Read-only Source Directory
 
 on:
   push:
-    branches: github-actions
+    branches: custom/readonly-source-dir
 
 jobs:
   build:
