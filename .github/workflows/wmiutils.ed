@@ -1,0 +1,7 @@
+r OKEGui/OKEGui/Utils/WmiUtils.cs
+/int GetAvailablePhysicalMemory/+1
+a
+	return 1<<30;
+.
+w OKEGui/OKEGui/Utils/WmiUtils.cs
+q

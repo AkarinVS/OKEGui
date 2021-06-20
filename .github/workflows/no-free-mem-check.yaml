@@ -1,8 +1,10 @@
-name: OKEGui Build
+name: "OKEGui Custom Build: no free memory check"
 
 on:
   push:
-    branches: github-actions
+    branches:
+      - master
+      - custom/no-free-memory-check
 
 jobs:
   build:
@@ -34,6 +36,15 @@ jobs:
         cd eac3to-wrapper
         go build -ldflags "-X main.version=$(git describe --tags)"
         cd ..
+
+    - name: Patch source
+      shell: bash
+      run: |
+        git clone https://github.com/AkarinVS/exe
+        ls -l exe/ed.exe .github/workflows/wmiutils.ed
+        ls -l OKEGui/OKEGui/Utils/WmiUtils.cs
+        exe/ed.exe < .github/workflows/wmiutils.ed
+        ls -l OKEGui/OKEGui/Utils/WmiUtils.cs
 
     - name: Restore Packages
       run: nuget restore OKEGui/OKEGui.sln
