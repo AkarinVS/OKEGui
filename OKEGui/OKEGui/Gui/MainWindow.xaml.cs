@@ -31,15 +31,6 @@ namespace OKEGui
         public int WorkerCount = 0;
         public TaskManager tm = new TaskManager();
         public WorkerManager wm;
-        public const int WM_QUERYENDSESSION = 0x11;
-        public const int WM_ENDSESSION = 0x16;
-
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool ShutdownBlockReasonCreate(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)] string reason);
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool ShutdownBlockReasonDestroy(IntPtr hWnd);
-        [DllImport("kernel32.dll")]
-        static extern bool SetProcessShutdownParameters(uint dwLevel, uint dwFlags);
 
         public MainWindow()
         {
@@ -92,23 +83,11 @@ namespace OKEGui
             {
                 hwndSource.AddHook(_systemMenu.HandleMessage);
             }
-            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
-            source.AddHook(WndProc);
+            //HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
+            //source.AddHook(WndProc);
         }
 
-        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-
-            if (msg == WM_QUERYENDSESSION || msg == WM_ENDSESSION)
-            {
-                IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
-                // Prevent windows shutdown
-                ShutdownBlockReasonCreate(windowHandle, "干啥呢干啥呢，OKEGui还没关呢？");
-                
-            }
-
-            return IntPtr.Zero;
-        }
+ 
 
         private void Checkbox_Changed(object sender, RoutedEventArgs e)
         {
@@ -373,7 +352,6 @@ namespace OKEGui
                 else
                 {
                     IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
-                    ShutdownBlockReasonDestroy(windowHandle);
                     SubProcessService.KillAll();
                 }
             }
