@@ -181,6 +181,7 @@ namespace OKEGui
         // 为所有输入文件生成vs脚本，并添加任务至TaskManager。
         private void WizardFinish(object sender, RoutedEventArgs e)
         {
+          try {
             // 处理PROJECTDIR标签
             if (Constants.projectDirRegex.IsMatch(vsScript)) {
                 string[] dirTag = Constants.projectDirRegex.Split(vsScript);
@@ -189,12 +190,14 @@ namespace OKEGui
             }
 
             string updatedVsScript = vsScript;
+            Logger.Trace("updatedVsScript: " + updatedVsScript);
 
             // 处理MEMORY标签
             if(Constants.memoryRegex.IsMatch(updatedVsScript))
             {
                 string[] memoryTag = Constants.memoryRegex.Split(updatedVsScript);
                 updatedVsScript = memoryTag[0] + memoryTag[1] + eachFreeMemory.ToString() + memoryTag[3];
+                Logger.Trace("MEMORY updatedVsScript: " + updatedVsScript);
             }
 
             // 处理DEBUG标签
@@ -208,6 +211,7 @@ namespace OKEGui
                     return;
                 }
                 updatedVsScript = debugTag[0] + debugTag[1] + "None" + debugTag[3];
+                Logger.Trace("DEBUG updatedVsScript: " + updatedVsScript);
             }
 
             string[] inputTemplate = Constants.inputRegex.Split(updatedVsScript);
@@ -230,6 +234,7 @@ namespace OKEGui
 
                 // 清理文件
                 cleaner.Clean(inputFile, new List<string> { json.InputScript, inputFile + ".lwi" });
+                Logger.Trace("clean lwi");
 
                 EpisodeConfig config = null;
                 string cfgPath = inputFile + ".json";
@@ -247,6 +252,7 @@ namespace OKEGui
                         continue;
                     }
                 }
+                Logger.Trace("episode config.");
 
                 // 新建vpy文件（inputname.m2ts-mmddHHMM.vpy）
                 string vpy = inputTemplate[0] + inputTemplate[1] + "r\"" +
@@ -261,12 +267,15 @@ namespace OKEGui
                 Logger.Debug("Transformed input path: " + inputSuffixPath);
                 string newPath = new DirectoryInfo(wizardInfo.ProjectFile).Parent.FullName + "/" + inputSuffixPath;
                 Directory.CreateDirectory(new DirectoryInfo(newPath).Parent.FullName);
+                Logger.Trace("mkdir tmp: " + newPath);
                 string outPath = Regex.Replace(newPath, @"[/\\]._[/\\]", "\\output\\");
                 Directory.CreateDirectory(new DirectoryInfo(outPath).Parent.FullName);
+                Logger.Trace("mkdir output: " + outPath);
 
                 DateTime time = DateTime.Now;
                 string fileName = newPath + "-" + time.ToString("MMddHHmm") + ".vpy";
                 File.WriteAllText(fileName, vpy);
+                Logger.Trace("vpy created: " + fileName);
 
                 FileInfo finfo = new FileInfo(inputFile);
                 TaskDetail td = new TaskDetail
@@ -288,8 +297,14 @@ namespace OKEGui
 
                 // 寻找章节
                 td.ChapterStatus = ChapterService.UpdateChapterStatus(td);
+                Logger.Trace("chapter update.");
                 workerManager.AddTask(td);
             }
+          }
+          catch (Exception ex)
+          {
+              Logger.Fatal(ex.StackTrace);
+          }
         }
 
         private void DeleteInput_Click(object sender, RoutedEventArgs e)
