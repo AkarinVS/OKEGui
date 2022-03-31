@@ -12,6 +12,7 @@ namespace OKEGui
     {
         private ManualResetEvent retrieved = new ManualResetEvent(false);
         private Action<double> _progressCallback;
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
         // TODO: 变更编码参数
         public QAACEncoder(AudioJob j, Action<double> progressCallback, int bitrate = Constants.QAACBitrate, int quality = 0) : base()
@@ -42,7 +43,6 @@ namespace OKEGui
 
         public override void ProcessLine(string line, StreamType stream)
         {
-            base.ProcessLine(line, stream);
             Regex rAnalyze = new Regex("\\[([0-9.]+)%\\]");
             double p = 0;
             if (rAnalyze.IsMatch(line))
@@ -53,13 +53,17 @@ namespace OKEGui
                     _progressCallback(p);
                 }
             }
-            if (line.Contains(".done"))
+            else
             {
-                SetFinish();
-            }
-            if (line.Contains("ERROR"))
-            {
-                throw new OKETaskException(Constants.qaacErrorSmr);
+                Logger.Debug(line);
+                if (line.Contains(".done"))
+                {
+                    SetFinish();
+                }
+                if (line.Contains("ERROR"))
+                {
+                    throw new OKETaskException(Constants.qaacErrorSmr);
+                }
             }
         }
     }
