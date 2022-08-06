@@ -84,6 +84,13 @@ jobs:
         pushd ./OKEGui/OKEGui/bin
         zip -9r ../../../"OKEGui-mod-$(git describe --tags).zip" Release
 
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: release
+        path: |
+          OKEGui-*.zip
+
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
