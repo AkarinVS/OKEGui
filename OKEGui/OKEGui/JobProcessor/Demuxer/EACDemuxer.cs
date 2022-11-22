@@ -269,8 +269,8 @@ namespace OKEGui
 
                 if (TrackCodec.Unknown == trackInfo.Codec)
                 {
-                    //throw new ArgumentException($"不明类型: {trackInfo.RawOutput}");
-                } else
+                    throw new ArgumentException($"不明类型: {trackInfo.RawOutput}");
+                }
                 tracks.Add(trackInfo);
             }
         }
