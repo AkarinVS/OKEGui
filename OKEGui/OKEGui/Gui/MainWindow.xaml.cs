@@ -10,6 +10,7 @@ using OKEGui.Utils;
 using OKEGui.Worker;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
 
 namespace OKEGui
 {
@@ -82,7 +83,11 @@ namespace OKEGui
             {
                 hwndSource.AddHook(_systemMenu.HandleMessage);
             }
+            //HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
+            //source.AddHook(WndProc);
         }
+
+ 
 
         private void Checkbox_Changed(object sender, RoutedEventArgs e)
         {
@@ -346,6 +351,7 @@ namespace OKEGui
                 }
                 else
                 {
+                    IntPtr windowHandle = Process.GetCurrentProcess().MainWindowHandle;
                     SubProcessService.KillAll();
                 }
             }
