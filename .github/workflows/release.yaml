@@ -90,8 +90,12 @@ jobs:
         set -ex
         mkdir -p "./OKEGui/OKEGui/bin/Release/tools/rpc"
         #
-        curl -s -o RPChecker.exe -L https://github.com/vcb-s/rp-checker/releases/download/1.0.6.6/RPChecker.exe
+        curl -s -o RPChecker.exe -L https://github.com/vcb-s/rp-checker/releases/download/1.0.7.1/RPChecker.exe
         mv RPChecker.exe "./OKEGui/OKEGui/bin/Release/tools/rpc/"
+        #
+        curl -s -o RpcTemplate.vpy https://raw.githubusercontent.com/AmusementClub/vapoursynth-script/master/RpcTemplate.vpy
+        mv "./OKEGui/OKEGui/bin/Release/tools/rpc/RpcTemplate.vpy" "./OKEGui/OKEGui/bin/Release/tools/rpc/RpcTemplate.vpy.old"
+        mv RpcTemplate.vpy "./OKEGui/OKEGui/bin/Release/tools/rpc/"
 
     - name: Package release
       shell: bash
@@ -100,7 +104,8 @@ jobs:
         export PATH=`pwd`/exe/:$PATH
         cp -r dist/windows/examples ./OKEGui/OKEGui/bin/Release
         pushd ./OKEGui/OKEGui/bin
-        zip -9r ../../../"OKEGui-mod-$(git describe --tags).zip" Release
+        mv Release OKEGui-mod
+        zip -9r ../../../"OKEGui-mod-$(git describe --tags).zip" OKEGui-mod
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
