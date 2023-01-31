@@ -32,6 +32,7 @@
     </TargetFrameworkProfile>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <ClearOutputDirectory>False</ClearOutputDirectory>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -262,8 +263,9 @@
          <InputAssemblies Include="$(OutputPath)\NLog.dll" />
          <InputAssemblies Include="$(OutputPath)\System.ValueTuple.dll" />
          <InputAssemblies Include="$(OutputPath)\TChapter.dll" />
-         <InputAssemblies Include="$(OutputPath)\Xceed.Wpf.Toolkit.dll" />
+         <!--<InputAssemblies Include="$(OutputPath)\Xceed.Wpf.Toolkit.dll" />-->
          <InputAssemblies Include="$(OutputPath)\YamlDotNet.dll" />
+         <AssembliesToClean Include="@(InputAssemblies)" Condition="%(Extension) != '.exe'" />
      </ItemGroup>
 
      <ILRepack
@@ -274,6 +276,11 @@
          OutputFile="$(TargetPath)"
          Parallel="true"
          TargetKind="SameAsPrimaryAssembly" />
+
+     <Delete Files="@(AssembliesToClean)" />
+     <Delete Files="@(AssembliesToClean->'$(OutDir)%(DestinationSubDirectory)%(Filename).xml')" />
+     <Delete Files="@(AssembliesToClean->'$(OutDir)%(DestinationSubDirectory)%(Filename).pdb')" />
+     <Delete Files="$(OutputPath)\libmp4v2.dll" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
