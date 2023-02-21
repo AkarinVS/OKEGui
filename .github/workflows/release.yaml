@@ -11,15 +11,15 @@ jobs:
     #if: github.event.base_ref == 'refs/heads/mod'
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: recursive
 
     - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
+      uses: microsoft/setup-msbuild@v1.1
 
     - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.5
+      uses: NuGet/setup-nuget@v1
 
     - name: Setup Go
       uses: actions/setup-go@v2
@@ -108,7 +108,7 @@ jobs:
         zip -9r ../../../"OKEGui-mod-$(git describe --tags).zip" OKEGui-mod
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: release
         path: |
