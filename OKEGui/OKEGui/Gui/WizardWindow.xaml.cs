@@ -310,7 +310,8 @@ namespace OKEGui
           }
           catch (Exception ex)
           {
-              Logger.Fatal(ex.StackTrace);
+              Logger.Error(ex.StackTrace);
+              System.Windows.MessageBox.Show("任务初始化失败：" + ex.Message);
           }
         }
 
