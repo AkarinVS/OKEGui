@@ -15,5 +15,6 @@ if not '%errorlevel%' == '0' (
     powershell Start-Process -FilePath "%0" -verb runas >NUL 2>&1
     exit /b
 )
-powercfg /powerthrottling disable %~dp0\tools\x26x\x265.exe
-powercfg /powerthrottling disable %~dp0\tools\vapoursynth\vspipe.exe
+powercfg /powerthrottling disable /PATH %~dp0\tools\x26x\x265.exe
+powercfg /powerthrottling disable /PATH %~dp0\tools\x26x\x264.exe
+powercfg /powerthrottling disable /PATH %~dp0\tools\vapoursynth\vspipe.exe
